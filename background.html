@@ -1,0 +1,46 @@
+<html>
+  <script src="jquery.min.js"></script>
+  <script>
+
+	/*
+	 * Request listener.
+	 */
+	chrome.extension.onRequest.addListener(function(request, sender, callback) {
+		if (request.action == 'getMenu') {
+			$.get('menu.html', function(data) {
+				callback(data)
+			});
+		}
+
+		if(request.action == 'sendData') {
+			// TODO: put url into options configuration
+			alert(request.data);
+//			$.ajax('http://localhost:8080', request.data, function(data) {
+//			});
+		}
+	});
+
+
+	chrome.browserAction.setBadgeText({'text': 'off'});
+
+
+	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+		// TODO: move to onClick
+//		chrome.tabs.executeScript(tabId, {file:"jquery.min.js"});
+//		chrome.tabs.executeScript(tabId, {file:"link_menu.js"});
+//		chrome.tabs.insertCSS(tabId, {file:"link_menu.css"});
+	});
+
+    chrome.browserAction.onClicked.addListener(function(tab) {
+		// TODO: toggle off
+		// TODO: save state after click
+
+		chrome.tabs.executeScript(tab.id, {file:"jquery.min.js"});
+		chrome.tabs.executeScript(tab.id, {file:"link_menu.js"});
+		chrome.tabs.insertCSS(tab.id, {file:"link_menu.css"});
+
+		chrome.browserAction.setBadgeText({'text': 'on', 'tabId': tab.id});
+    });
+  </script>
+</html>
+

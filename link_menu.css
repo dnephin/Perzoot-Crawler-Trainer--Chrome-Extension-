@@ -1,0 +1,38 @@
+
+
+.pz_link_over {
+	background: #BCF;
+	font-weight: bold;
+	padding: 3px 0;
+}
+
+
+
+/* Menu */
+#pz_crawler_training_menu {
+	border: 1px solid black;
+	background: #fff;
+	width: 200px;
+	position: fixed;
+	top: 5px;
+	right: 5px;
+	padding: 5px;
+}
+
+#pz_crawler_training_menu UL {
+	padding: 1px 0;
+	margin: 0;
+	list-style: none;
+}
+
+#pz_crawler_training_menu LI, 
+#pz_crawler_training_menu INPUT, 
+#pz_crawler_training_menu LABEL {
+	font-family: sans-serif;
+	font-size: 12px;
+
+}
+
+#send_button {
+	margin-left: 5px;
+}
