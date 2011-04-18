@@ -3,6 +3,11 @@
 
 var LINK_TYPE;
 var DISABLE_CLICK = true;
+var LINK_CLASS_NAMES = {
+	// Keys should match values in link_type input in menu.html
+	'posting_links': 'PERZOOT_CRAWLER_POSTING',
+	'listing_links': 'PERZOOT_CRAWLER_LISTING'
+};
 
 
 /*
@@ -15,9 +20,9 @@ chrome.extension.sendRequest({'action': 'getMenu'}, function(data) {
 	/*
 	 * Setup events
 	 */
-	$('input[name=link_type').change(function(event) {
-
-
+	LINK_TYPE = $('input[name=link_type]:checked').val();
+	$('input[name=link_type]').change(function(event) {
+		LINK_TYPE = $('input[name=link_type]:checked').val();
 	});
 
 
@@ -25,9 +30,12 @@ chrome.extension.sendRequest({'action': 'getMenu'}, function(data) {
 	 * Send event.
 	 */
 	$('#send_button').click(function(event) {
+
+		// TODO: show summary  and prompt for confirm
+
 		chrome.extension.sendRequest({
 			'action': 'sendData',
-			'data': $('html'),
+			'data': $('html').html(),
 			// TODO: page url if set to true
 			// TODO: find date if set to true
 			}, function(data) {
@@ -46,34 +54,51 @@ chrome.extension.sendRequest({'action': 'getMenu'}, function(data) {
 $('a').hover(
 	function(event) {
 		// mouse over
-		console.log('over ' + event.target.href);
-		elem = $(event.target);
-		elem.addClass('pz_link_over');
+		$(event.target).addClass('pz_link_over');
 	}, function(event) {
-		event.preventDefault();
-		console.log('out ' + event.target.href);
-		elem = $(event.target);
-		elem.removeClass('pz_link_over');
+		$(event.target).removeClass('pz_link_over');
 	}
 ).click( function(event) {
-	event.preventDefault();
-	$(event.target).addClass('PERZOOT_CRAWL_POST_LINK');
+	if (DISABLE_CLICK) {
+		event.preventDefault();
+	}
+	$(event.target).addClass(LINK_CLASS_NAMES[LINK_TYPE]);
+	// TODO: remove other class ?
 });
 
 
 
 // TODO: setup keyshortcuts for buttons
 // TODO: setup keyshortcut for disabling the preventDefault of clicks.
-$(document).keypress(function(event) {
+$(document).keydown(function(event) {
+	console.log(event)
 	// 65 = a
 	if (event.which == 65) {
 		console.log('saved link as posting page.');
+		$('input[name=link_type][value=posting_links]').click();
 		return;
 	}
 
 	// 83 = s
 	if (event.which == 83) {
 		console.log('saved link as listing page.');
+		$('input[name=link_type][value=listing_links]').click();
+		return;
+	}
+
+	// 16 = [shift]
+	if (event.which == 16) {
+		DISABLE_CLICK = false;
+		return;
+	}
+});
+
+	// 67 = q
+
+$(document).keyup(function(event) {
+	// 16 = [shift]
+	if (event.which == 16) {
+		DISABLE_CLICK = true;
 		return;
 	}
 });
