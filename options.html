@@ -1,0 +1,69 @@
+<html>
+<head>
+	<title>Perzoot Crawler Trainer - Options</title>
+	<script src="jquery.min.js"></script>
+	<script>
+
+	var OPTION_NAME_LIST = chrome.extension.getBackgroundPage().OPTION_NAME_LIST;
+
+	function restore_options() {
+		$.each(OPTION_NAME_LIST, function(index, value) {
+			$('#'+value).val(localStorage[value]);
+		});
+	}
+
+	function save_options() {
+		$.each(OPTION_NAME_LIST, function(index, value) {
+			localStorage[value] =  $('#'+value).val();
+		});
+		$('body').append('<div>Saved.</div>')
+	}
+	</script>
+	<style>
+		LABEL, H1, INPUT { font-family: sans-serif; }
+		label { width: 200px; display: inline-block; }
+		.option_key { width: 30px; }
+		input { width: 200px; border: 1px solid black; padding: 2px; }
+		UL { list-style: none; }
+	</style>
+</head>
+<body onload="restore_options()">
+
+<h1>Perzoot Crawler Trainer - Options</h1>
+
+<form>
+<ul>
+	<li>
+		<label>Identification String</label>
+		<input id="identification_string" type="text" />
+	</li>
+	<li>
+		<label>Upload Hostname</label>
+		<input id="upload_hostname" type="text" />
+	</li>
+	<li>
+		<label>Posting Key</label>
+		<input id="posting_key" type="text" class="option_key"/>
+	</li>
+	<li>
+		<label>Listing Key</label>
+		<input id="listing_key" type="text" class="option_key"/>
+	</li>
+	<li>
+		<label>Junk Key</label>
+		<input id="junk_key" type="text" class="option_key"/>
+	</li>
+	<li>
+		<label>Link toggle Key</label>
+		<input id="link_toggle_key" type="text" class="option_key"/>
+	</li>
+	<li>
+		<input type="button" value="Save" onclick="save_options()" />
+	</li>
+</ul>
+
+
+</form>
+
+</body>
+</html>

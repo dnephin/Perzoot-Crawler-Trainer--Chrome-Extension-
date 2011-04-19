@@ -1,5 +1,13 @@
 
 
+
+#pz_crawler_training_menu H1 {
+	font-weight: bold;
+	text-align: right;
+	margin: 2px;
+	padding: 0;
+}
+
 .pz_link_over {
 	background: #BCF;
 	font-weight: bold;
@@ -26,6 +34,8 @@
 }
 
 #pz_crawler_training_menu LI, 
+#pz_crawler_training_menu H1, 
+#pz_crawler_training_menu SPAN, 
 #pz_crawler_training_menu INPUT, 
 #pz_crawler_training_menu LABEL {
 	font-family: sans-serif;
@@ -35,4 +45,12 @@
 
 #send_button {
 	margin-left: 5px;
+}
+
+#link_status {
+	margin-left: 5px;
+	font-weight: bold;
+	padding: 1px  5px;
+	background: #E3B1BD;
+	display: none;
 }

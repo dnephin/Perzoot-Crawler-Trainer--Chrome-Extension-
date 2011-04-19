@@ -3,6 +3,7 @@
   "version": "0.1",
   "description": "Classify links as list pages or posting pages.",
   "background_page": "background.html",
+  "options_page": "options.html",
   "browser_action": {
     "default_icon": "icons/icon.png",
 	"default_title": "Perzoot Crawler Trainer"

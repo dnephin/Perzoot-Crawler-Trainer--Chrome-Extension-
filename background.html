@@ -2,27 +2,43 @@
   <script src="jquery.min.js"></script>
   <script>
 
+	var VERSION = 0.1;
+
+	// List of configurable options
+	var OPTION_NAME_LIST = [
+		'identification_string', 
+		'listing_key', 
+		'posting_key',
+		'junk_key',
+		'link_toggle_key',
+		'upload_hostname'
+	];
+
 	/*
 	 * Request listener.
 	 */
 	chrome.extension.onRequest.addListener(function(request, sender, callback) {
-		if (request.action == 'getMenu') {
-			$.get('menu.html', function(data) {
+		if (request.action == 'getHTML') {
+			$.get(request.page, function(data) {
 				callback(data)
 			});
 		}
 
+		if (request.action == 'getOptions') {
+			callback(localStorage);
+		}
+
 		if(request.action == 'sendData') {
-			// TODO: put url into options configuration
-			alert(request.data);
+			request.data['version'] = VERSION;
 //			$.ajax('http://localhost:8080', request.data, function(data) {
 //			});
+			alert(request.data);
+			callback(true);
 		}
 	});
 
 
 	chrome.browserAction.setBadgeText({'text': 'off'});
-
 
 	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 		// TODO: move to onClick
@@ -34,7 +50,6 @@
     chrome.browserAction.onClicked.addListener(function(tab) {
 		// TODO: toggle off
 		// TODO: save state after click
-
 		chrome.tabs.executeScript(tab.id, {file:"jquery.min.js"});
 		chrome.tabs.executeScript(tab.id, {file:"link_menu.js"});
 		chrome.tabs.insertCSS(tab.id, {file:"link_menu.css"});
