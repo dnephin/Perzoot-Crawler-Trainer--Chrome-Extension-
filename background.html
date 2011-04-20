@@ -79,7 +79,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 	// TODO: save state after click
 	chrome.tabs.executeScript(tab.id, {file:"jquery.min.js"});
 	chrome.tabs.executeScript(tab.id, {file:"link_menu.js"});
-	chrome.tabs.insertCSS(tab.id, {file:"link_menu.css"});
+	chrome.tabs.insertCSS(tab.id, {file:"context.css"});
 
 	chrome.browserAction.setBadgeText({'text': 'on', 'tabId': tab.id});
 });

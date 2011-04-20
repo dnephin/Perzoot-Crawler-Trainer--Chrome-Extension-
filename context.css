@@ -42,6 +42,7 @@
 #pz_crawler_training_menu SPAN, 
 #pz_crawler_training_menu INPUT, 
 #pz_crawler_training_menu LABEL,
+#data_summary H1, 
 #data_summary H2,
 #data_summary LI {
 	font-family: sans-serif;
@@ -68,17 +69,17 @@
 #data_summary {
 	border: 1px solid black;
 	background: #fff;
-	width: 600px;
+	width: 550px;
 	position: fixed;
-	top: 100px;
-	left: 50px;
+	top: 5px;
+	left: 100px;
 	padding: 5px;
 	
 }
 
 #data_summary H2 {
 	font-weight: bold;
-	font-size: 14px;
+	font-size: 12px;
 	margin: 3px 0;
 }
 
@@ -88,4 +89,9 @@
 
 #data_summary INPUT {
 	margin-top: 10px;
+}
+
+#data_summary H1 {
+	font-size: 14px;
+	font-weight: bold;
 }

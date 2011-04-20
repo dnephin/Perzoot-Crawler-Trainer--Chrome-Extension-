@@ -1,4 +1,8 @@
-
+/*
+ * Context Script
+ *
+ * Displays menu, data summary, and annotates links to be classified.
+ */
 
 /*
  * Globals and Constants.
@@ -11,7 +15,6 @@ var LINK_CLASS_NAMES = {
 	'listing_links': 'PERZOOT_CRAWLER_LISTING',
 	'junk_links': 'PERZOOT_CRAWLER_JUNK'
 };
-
 
 
 /*
@@ -69,6 +72,15 @@ port.onMessage.addListener(function(msg) {
 					$('#sum_'+name).next('ul').append('<li>'+$(tag).attr('href')+'</li>');
 				});
 			});
+			if ($('#include_url').attr('checked')) {
+				var text = document.location.href;
+				if ($('#find_date').attr('checked')) {
+					text += ' <em>includes date</em> ';
+				}
+				$('#included_page_url').append(text);
+			} else {
+				$('#included_page_url').detach();
+			}
 			return;
 		}
 	}
@@ -90,11 +102,11 @@ port.onMessage.addListener(function(msg) {
 send_data = function(event) {
 	$('#data_summary').detach();
 	var data = {'html': $('body').html() };
-	if ($('#include_url')) {
+	if ($('#include_url').attr('checked')) {
 		data.search_url = document.location.href;
 	}
 
-	if ($('#find_date')) {
+	if ($('#find_date').attr('checked')) {
 		data.includes_date = true; 
 	}
 	
