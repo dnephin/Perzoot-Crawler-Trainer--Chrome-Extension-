@@ -1,6 +1,7 @@
 
-
-
+/*
+ * Page
+ */
 #pz_crawler_training_menu H1 {
 	font-weight: bold;
 	text-align: right;
@@ -16,7 +17,9 @@
 
 
 
-/* Menu */
+/* 
+ * Menu 
+ */
 #pz_crawler_training_menu {
 	border: 1px solid black;
 	background: #fff;
@@ -27,6 +30,7 @@
 	padding: 5px;
 }
 
+#data_summary UL,
 #pz_crawler_training_menu UL {
 	padding: 1px 0;
 	margin: 0;
@@ -37,7 +41,9 @@
 #pz_crawler_training_menu H1, 
 #pz_crawler_training_menu SPAN, 
 #pz_crawler_training_menu INPUT, 
-#pz_crawler_training_menu LABEL {
+#pz_crawler_training_menu LABEL,
+#data_summary H2,
+#data_summary LI {
 	font-family: sans-serif;
 	font-size: 12px;
 
@@ -53,4 +59,33 @@
 	padding: 1px  5px;
 	background: #E3B1BD;
 	display: none;
+}
+
+
+/* 
+ * Summary 
+ */
+#data_summary {
+	border: 1px solid black;
+	background: #fff;
+	width: 600px;
+	position: fixed;
+	top: 100px;
+	left: 50px;
+	padding: 5px;
+	
+}
+
+#data_summary H2 {
+	font-weight: bold;
+	font-size: 14px;
+	margin: 3px 0;
+}
+
+#data_summary LI {
+	margin-left: 10px;
+}
+
+#data_summary INPUT {
+	margin-top: 10px;
 }

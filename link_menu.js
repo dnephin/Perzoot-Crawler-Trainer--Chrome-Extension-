@@ -13,41 +13,75 @@ var LINK_CLASS_NAMES = {
 };
 
 
+
+/*
+ * Connect to background channel.
+ */
+var port = chrome.extension.connect({'name': 'background_channel'});
+/*
+ * Fetch menu
+ */
+port.postMessage({'action': 'getHTML', 'page': 'menu.html'});
 /*
  * Retrieve options from background
  */
 var OPTIONS;
-chrome.extension.sendRequest({'action': 'getOptions'}, function(data) {
-	OPTIONS = data;
-});
-
+port.postMessage({'action': 'getOptions'});
 
 /*
- * Display menu
+ * Message channel handling.
  */
-chrome.extension.sendRequest({
-		'action': 'getHTML', 
-		'page': 'menu.html'
-	}, function(page_data) {
-		$('#pz_crawler_training_menu').detach();
-		$('body').append(page_data);
+port.onMessage.addListener(function(msg) {
+
+	console.log('link_menu received: ' + msg.response)
+
+	if (msg.response == 'getHTML') {
+		if (msg.page == 'menu.html') {
+			$('#pz_crawler_training_menu').detach();
+			$('body').append(msg.data);
 	
-		/*
-		 * Setup events
-		 */
-		LINK_TYPE = $('input[name=link_type]:checked').val();
-		$('input[name=link_type]').change(function(event) {
+			// Setup events
 			LINK_TYPE = $('input[name=link_type]:checked').val();
-		});
+			$('input[name=link_type]').change(function(event) {
+				LINK_TYPE = $('input[name=link_type]:checked').val();
+			});
 	
-		/*
-		 * Display summary before send.
-		 */
-		$('#send_button').click(function(event) {
-			display_summary();
-		});
+			// Display summary before send.
+			$('#show_summary').click(function(event) {
+				port.postMessage({'action': 'getHTML', 'page': 'data_summary.html'});
+			});
+			return;
+		}
+
+		if (msg.page == 'data_summary.html') {
+			$('#data_summary').detach();
+			$('body').append(msg.data);
+	
+			$('#send_button').click(send_data);
+			$('#cancel_button').click(function (event) {
+				$('#data_summary').detach();
+			});
+	
+			$.each(LINK_CLASS_NAMES, function(name, class_name) {
+				var elems = $('.'+class_name);
+				$('#sum_'+name).append(' <em> ('+elems.length+') </em>');
+				elems.each(function(index, tag) {
+					$('#sum_'+name).next('ul').append('<li>'+$(tag).attr('href')+'</li>');
+				});
+			});
+			return;
+		}
 	}
-);
+
+	if (msg.response == 'getOptions') {
+		OPTIONS = msg.options;
+	}
+
+	if (msg.response == 'sendData') {
+		var text = (msg.success) ? 'Success' : 'Failed';
+		$('#pz_crawler_training_menu').append('<div>'+text+'!</div>');
+	}
+});
 
 
 /*
@@ -55,7 +89,7 @@ chrome.extension.sendRequest({
  */
 send_data = function(event) {
 	$('#data_summary').detach();
-	var data = {'html': $('html').html() };
+	var data = {'html': $('body').html() };
 	if ($('#include_url')) {
 		data.search_url = document.location.href;
 	}
@@ -64,43 +98,7 @@ send_data = function(event) {
 		data.includes_date = true; 
 	}
 	
-	chrome.extension.sendRequest({
-		'action': 'sendData',
-		'data': data
-	}, function(response) {
-		if (!response) {
-			alert(chrome.extension.lastError);
-			return;
-		}
-		$('#pz_crawler_training_menu').append('<div>Success!</div>');
-	});
-}
-
-/*
- * Display summary.
- */
-function display_summary() {
-	chrome.extension.sendRequest({
-		'action': 'getHTML', 
-		'page': 'data_summary.html'
-	}, function(page_data) {
-		console.log('received data.');
-//		$('#data_summary').detach();
-//		$('body').append(page_data);
-//
-//		$('#send_button').click(send_data);
-//		$('#cancel_button').click(function (event) {
-//			$('#data_summary').detach();
-//		});
-//
-//		$.each(LINK_CLASS_NAMES, function(name, class_name) {
-//			var elems = $('.'+class_name);
-//			$('#sum_'+name).append(' <em> ('+elems.length+') </em>');
-//			elems.each(function(index, tag) {
-//				$('#sum_'+name).next('ul').append('<li>'+tag.attr('href')+'</li>');
-//			});
-//		});
-	});
+	port.postMessage({'action': 'sendData', 'data': data})
 }
 
 
@@ -140,7 +138,7 @@ $(document).keydown(function(event) {
 	}
 
 	if (event.which == OPTIONS['junk_key'].charCodeAt(0)) {
-		console.log('saved link as listing page.');
+		console.log('saved link as junk page.');
 		$('input[name=link_type][value=junk_links]').click();
 		return;
 	}
