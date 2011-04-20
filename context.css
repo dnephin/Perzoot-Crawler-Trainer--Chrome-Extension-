@@ -45,6 +45,7 @@
 #data_summary H1, 
 #data_summary H2,
 #data_summary LI {
+	color: black;
 	font-family: sans-serif;
 	font-size: 12px;
 

@@ -15,7 +15,7 @@ var OPTION_NAME_LIST = [
 ];
 
 /*
- * Channel Listener.
+ * Channel Listener and Communication.
  */
 chrome.extension.onConnect.addListener(function(port) {
 	console.log('connection ' + port.name);
@@ -65,23 +65,48 @@ chrome.extension.onConnect.addListener(function(port) {
 });
 
 
-chrome.browserAction.setBadgeText({'text': 'off'});
-
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-	// TODO: move to onClick
-//		chrome.tabs.executeScript(tabId, {file:"jquery.min.js"});
-//		chrome.tabs.executeScript(tabId, {file:"link_menu.js"});
-//		chrome.tabs.insertCSS(tabId, {file:"link_menu.css"});
-});
-
-chrome.browserAction.onClicked.addListener(function(tab) {
-	// TODO: toggle off
-	// TODO: save state after click
+function activate(tab) {
 	chrome.tabs.executeScript(tab.id, {file:"jquery.min.js"});
 	chrome.tabs.executeScript(tab.id, {file:"link_menu.js"});
 	chrome.tabs.insertCSS(tab.id, {file:"context.css"});
+}
 
-	chrome.browserAction.setBadgeText({'text': 'on', 'tabId': tab.id});
+function deactivate(tab) {
+	chrome.tabs.executeScript(tab.id, {file:"remove.js"});
+}
+
+/*
+ * Init.
+ */
+var ENABLED = false;
+chrome.browserAction.setBadgeText({'text': 'off'});
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+	if (ENABLED && changeInfo.status == 'complete') {
+		activate(tabId);
+	} else {
+		deactivate(tabId);
+	}
+});
+
+chrome.tabs.onSelectionChanged.addListener(function(tabId, selectInfo) {
+	if (ENABLED) {
+		activate(tabId);
+	} else {
+		deactivate(tabId);
+	}
+});
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+
+	ENABLED = !ENABLED;
+	if (ENABLED) {
+		activate(tab);
+		chrome.browserAction.setBadgeText({'text': 'on'});
+	} else {
+		deactivate(tab);
+		chrome.browserAction.setBadgeText({'text': 'off'});
+	}
 });
 
 </script>
