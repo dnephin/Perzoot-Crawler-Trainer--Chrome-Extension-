@@ -11,8 +11,8 @@ var LINK_TYPE;
 var TOGGLE_ACTIVE = true;
 var LINK_CLASS_NAMES = {
 	// Keys should match values in link_type input in menu.html
-	'posting_links': 'PERZOOT_CRAWLER_POSTING',
-	'listing_links': 'PERZOOT_CRAWLER_LISTING',
+	'save_links': 'PERZOOT_CRAWLER_SAVE',
+	'follow_links': 'PERZOOT_CRAWLER_FOLLOW',
 	'junk_links': 'PERZOOT_CRAWLER_JUNK'
 };
 
@@ -137,20 +137,17 @@ $('a').hover(
  * Capture key events.
  */
 $(document).keydown(function(event) {
-	if (event.which == OPTIONS['posting_key'].charCodeAt(0)) {
-		console.log('saved link as posting page.');
-		$('input[name=link_type][value=posting_links]').click();
+	if (event.which == OPTIONS['save_key'].charCodeAt(0)) {
+		$('input[name=link_type][value=save_links]').click();
 		return;
 	}
 
-	if (event.which == OPTIONS['listing_key'].charCodeAt(0)) {
-		console.log('saved link as listing page.');
-		$('input[name=link_type][value=listing_links]').click();
+	if (event.which == OPTIONS['follow_key'].charCodeAt(0)) {
+		$('input[name=link_type][value=follow_links]').click();
 		return;
 	}
 
 	if (event.which == OPTIONS['junk_key'].charCodeAt(0)) {
-		console.log('saved link as junk page.');
 		$('input[name=link_type][value=junk_links]').click();
 		return;
 	}

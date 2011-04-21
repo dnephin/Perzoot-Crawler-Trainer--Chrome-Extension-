@@ -7,8 +7,8 @@ var VERSION = 0.1;
 // List of configurable options
 var OPTION_NAME_LIST = [
 	'identification_string', 
-	'listing_key', 
-	'posting_key',
+	'follow_key', 
+	'save_key',
 	'junk_key',
 	'link_toggle_key',
 	'upload_hostname'
@@ -67,7 +67,7 @@ chrome.extension.onConnect.addListener(function(port) {
 
 function activate(tab) {
 	chrome.tabs.executeScript(tab.id, {file:"jquery.min.js"});
-	chrome.tabs.executeScript(tab.id, {file:"link_menu.js"});
+	chrome.tabs.executeScript(tab.id, {file:"menu.js"});
 	chrome.tabs.insertCSS(tab.id, {file:"context.css"});
 }
 

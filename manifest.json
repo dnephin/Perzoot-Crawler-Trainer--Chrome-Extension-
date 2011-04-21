@@ -1,7 +1,7 @@
 {
   "name": "Perzoot Crawler Trainer",
   "version": "0.1",
-  "description": "Classify links as list pages, posting pages, or junk pages.",
+  "description": "Classify links as follow pages, save pages, or junk pages.",
   "background_page": "background.html",
   "options_page": "options.html",
   "browser_action": {
