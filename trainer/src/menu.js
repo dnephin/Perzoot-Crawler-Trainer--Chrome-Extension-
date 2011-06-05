@@ -109,7 +109,7 @@ send_data = function(event) {
 	if ($('#find_date').attr('checked')) {
 		data.includes_date = true; 
 	}
-	
+
 	port.postMessage({'action': 'sendData', 'data': data})
 }
 

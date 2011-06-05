@@ -49,16 +49,27 @@ chrome.extension.onConnect.addListener(function(port) {
 			port.postMessage({'response': msg.action, 'options': options});
 		}
 
+		console.log(msg)
 		if (msg.action == 'sendData') {
-			var data = {
-				'version': VERSION,
-				'data': msg.data
-			}
-//			$.ajax('http://localhost:8080', request.data, function(data) {
-//			});
-			alert(data);
-			port.postMessage({
-				'response': msg.action, 'success': true,
+			msg.data['version'] =  VERSION;
+			$.ajax({
+				type: 'POST',
+				url: localStorage['upload_hostname'],
+				data: msg.data, 
+				success: function(data) {
+					console.log('Sent to ' + localStorage['upload_hostname']);
+					port.postMessage({
+						'response': msg.action, 'success': true,
+					});
+				},
+				error: function(data, error, ex) {
+					console.log('Sent to ' + localStorage['upload_hostname']);
+					console.log(error);
+					console.log(data);
+					port.postMessage({
+						'response': msg.action, 'success': false,
+					});
+				}
 			});
 		}
 	});
